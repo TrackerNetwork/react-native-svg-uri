@@ -140,13 +140,13 @@ class SvgUri extends Component{
 
     return responseXML;
   }
-   
-  // Remove empty strings from children array  
+
+  // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
       if (typeof child === 'string') {
         if (child.trim.length === 0)
-          children.splice(children.indexOf(child), 1); 
+          children.splice(children.indexOf(child), 1);
       }
     }
   }
@@ -163,6 +163,9 @@ class SvgUri extends Component{
       }
       if (this.props.height) {
         componentAtts.height = this.props.height;
+      }
+      if (this.props.viewBox) {
+        componentAtts.viewBox = this.props.viewBox;
       }
 
       return <Svg key={i} {...componentAtts}>{childs}</Svg>;
@@ -303,6 +306,7 @@ SvgUri.propTypes = {
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
   fill: PropTypes.string,
+  viewBox: PropTypes.string
 }
 
 module.exports = SvgUri;
