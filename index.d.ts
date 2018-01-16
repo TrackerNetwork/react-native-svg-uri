@@ -34,6 +34,11 @@ interface SvgUriProps {
      * Fill color for the svg object
      */
     fill?: string
+
+    /**
+     * Viewbox for the SVG
+     */
+    viewBox?: string
 }
 
 export default class SvgUri extends Component<SvgUriProps, {}> { }
