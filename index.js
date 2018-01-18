@@ -6,8 +6,9 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 import Svg,{
     Circle,
+    ClipPath,
     Ellipse,
-    G ,
+    G,
     LinearGradient,
     RadialGradient,
     Line,
@@ -27,6 +28,8 @@ const ACCEPTED_SVG_ELEMENTS = [
   'svg',
   'g',
   'circle',
+  'clipPath',
+  'defs',
   'path',
   'rect',
   'defs',
@@ -43,10 +46,11 @@ const ACCEPTED_SVG_ELEMENTS = [
 
 // Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = ['viewBox', 'width', 'height'];
-const G_ATTS = ['id'];
+const G_ATTS = ['id', 'clipPath', 'transform', 'strokeWidth'];
 
 const CIRCLE_ATTS = ['cx', 'cy', 'r'];
-const PATH_ATTS = ['d'];
+const CLIPPATH_ATTS = ['id']
+const PATH_ATTS = ['d', 'fill', 'fillOpacity'];
 const RECT_ATTS = ['width', 'height'];
 const LINE_ATTS = ['x1', 'y1', 'x2', 'y2'];
 const LINEARG_ATTS = LINE_ATTS.concat(['id', 'gradientUnits']);
@@ -178,6 +182,9 @@ class SvgUri extends Component{
     case 'circle':
       componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
       return <Circle key={i} {...componentAtts}>{childs}</Circle>;
+    case 'clippath':
+      componentAtts = this.obtainComponentAtts(node, CLIPPATH_ATTS);
+      return <ClipPath key={i} {...componentAtts}>{childs}</ClipPath>;
     case 'rect':
       componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
       return <Rect key={i} {...componentAtts}>{childs}</Rect>;
