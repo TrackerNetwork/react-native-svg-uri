@@ -229,6 +229,9 @@ class SvgUri extends Component{
       return <TSpan key={i} {...componentAtts}>{childs}</TSpan>;
     case 'use':
       componentAtts = this.obtainComponentAtts(node, USE_ATTS);
+      if (!!componentAtts.href) {
+        componentAtts.href = ''
+      }
       return <Use key={i} {...componentAtts}>{childs}</Use>;
     default:
       return null;
