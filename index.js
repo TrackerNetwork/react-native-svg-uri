@@ -65,7 +65,7 @@ const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
-const USE_ATTS = ['xlink:href'];
+const USE_ATTS = ['href'];
 
 const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
@@ -229,9 +229,6 @@ class SvgUri extends Component{
       return <TSpan key={i} {...componentAtts}>{childs}</TSpan>;
     case 'use':
       componentAtts = this.obtainComponentAtts(node, USE_ATTS);
-      if (!!componentAtts.href) {
-        componentAtts.href = ''
-      }
       return <Use key={i} {...componentAtts}>{childs}</Use>;
     default:
       return null;
