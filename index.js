@@ -19,7 +19,8 @@ import Svg,{
     Text,
     TSpan,
     Defs,
-    Stop
+    Stop,
+    Use
 } from 'react-native-svg';
 
 import * as utils from './utils';
@@ -41,16 +42,17 @@ const ACCEPTED_SVG_ELEMENTS = [
   'polygon',
   'polyline',
   'text',
-  'tspan'
+  'tspan',
+  'use'
 ];
 
 // Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = ['viewBox', 'width', 'height'];
-const G_ATTS = ['id', 'clipPath', 'transform', 'strokeWidth'];
+const G_ATTS = ['id', 'clipPath'];
 
 const CIRCLE_ATTS = ['cx', 'cy', 'r'];
 const CLIPPATH_ATTS = ['id']
-const PATH_ATTS = ['d', 'fill', 'fillOpacity'];
+const PATH_ATTS = ['d', 'fill'];
 const RECT_ATTS = ['width', 'height'];
 const LINE_ATTS = ['x1', 'y1', 'x2', 'y2'];
 const LINEARG_ATTS = LINE_ATTS.concat(['id', 'gradientUnits']);
@@ -63,9 +65,11 @@ const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
+const USE_ATTS = ['xlink:href'];
+
 const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
-    'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
+    'strokeDasharray', 'strokeDashoffset', 'transform', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
 
 let ind = 0;
 
@@ -223,32 +227,29 @@ class SvgUri extends Component{
         componentAtts.y = fixYPosition(componentAtts.y, node)
       }
       return <TSpan key={i} {...componentAtts}>{childs}</TSpan>;
+    case 'use':
+      componentAtts = this.obtainComponentAtts(node, USE_ATTS);
+      return <Use key={i} {...componentAtts}>{childs}</Use>
     default:
       return null;
     }
   }
 
   obtainComponentAtts({attributes}, enabledAttributes) {
-    const styleAtts = {};
-    Array.from(attributes).forEach(({nodeName, nodeValue}) => {
-      Object.assign(styleAtts, utils.transformStyle({
+    return Array.from(attributes)
+      .map(utils.removeXLinkFromNodeName)
+      .map(utils.camelCaseNodeName)
+      .map(utils.removePixelsFromNodeValue)
+      .map(({nodeName, nodeValue}) => utils.transformAtts({
         nodeName,
         nodeValue,
         fillProp: this.state.fill
-      }));
-    });
-
-     const componentAtts =  Array.from(attributes)
-      .map(utils.camelCaseNodeName)
-      .map(utils.removePixelsFromNodeValue)
+      }))
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
         acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
         return acc
       }, {});
-    Object.assign(componentAtts, styleAtts);
-
-    return componentAtts;
   }
 
   inspectNode(node){
