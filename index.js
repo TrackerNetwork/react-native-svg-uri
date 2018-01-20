@@ -69,7 +69,7 @@ const USE_ATTS = ['xlink:href'];
 
 const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
-    'strokeDasharray', 'strokeDashoffset', 'transform', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY', 'style'];
+    'strokeDasharray', 'strokeDashoffset', 'transform', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
 
 let ind = 0;
 
@@ -229,27 +229,34 @@ class SvgUri extends Component{
       return <TSpan key={i} {...componentAtts}>{childs}</TSpan>;
     case 'use':
       componentAtts = this.obtainComponentAtts(node, USE_ATTS);
-      return <Use key={i} {...componentAtts}>{childs}</Use>
+      return <Use key={i} {...componentAtts}>{childs}</Use>;
     default:
       return null;
     }
   }
 
   obtainComponentAtts({attributes}, enabledAttributes) {
-    return Array.from(attributes)
-      .map(utils.removeXLinkFromNodeName)
-      .map(utils.camelCaseNodeName)
-      .map(utils.removePixelsFromNodeValue)
-      .map(({nodeName, nodeValue}) => utils.transformAtts({
+    const styleAtts = {};
+    Array.from(attributes).forEach(({nodeName, nodeValue}) => {
+      Object.assign(styleAtts, utils.transformStyle({
         nodeName,
         nodeValue,
         fillProp: this.state.fill
-      }))
+      }));
+    });
+
+    const componentAtts =  Array.from(attributes)
+      .map(utils.removeXLinkFromNodeName)
+      .map(utils.camelCaseNodeName)
+      .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
         acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
         return acc
       }, {});
+    Object.assign(componentAtts, styleAtts);
+
+    return componentAtts;
   }
 
   inspectNode(node){
