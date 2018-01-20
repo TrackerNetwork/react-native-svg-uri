@@ -69,7 +69,7 @@ const USE_ATTS = ['xlink:href'];
 
 const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
-    'strokeDasharray', 'strokeDashoffset', 'transform', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
+    'strokeDasharray', 'strokeDashoffset', 'transform', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY', 'style'];
 
 let ind = 0;
 
