@@ -20,11 +20,11 @@
   "author": "Matias Cortes",
   "license": "ISC",
   "dependencies": {
-    "react-native-svg": "^8.0.8",
+    "react-native-svg": "^6.4.1",
     "xmldom": "^0.1.22"
   },
   "peerDependencies": {
-    "react-native-svg": "8.0.8"
+    "react-native-svg": "6.4.1"
   },
   "bugs": {
     "url": "https://github.com/matiascba/react-native-svg-uri/issues"
